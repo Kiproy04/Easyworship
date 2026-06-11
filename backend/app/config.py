@@ -23,13 +23,20 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     FRONTEND_URL: str = "http://localhost:5173"
 
+    @field_validator("SECRET_KEY")
+    @classmethod
+    def secret_key_must_be_strong(cls, v: str) -> str:
+        if len(v) < 32:
+            raise ValueError("SECRET_KEY must be at least 32 characters")
+        return v
+
     @property
     def is_production(self) -> bool:
         return self.APP_ENV == "production"
 
     # ── Database ─────────────────────────────────────────────
     DATABASE_URL: str          # async (asyncpg)
-    DATABASE_SYNC_URL: str     # sync (psycopg2) — Alembic only
+    DATABASE_SYNC_URL: str     # sync (psycopg2) 
 
     # ── JWT ──────────────────────────────────────────────────
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30

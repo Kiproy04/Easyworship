@@ -17,7 +17,7 @@ env/
 ENV/
 
 # Environment variables — NEVER commit real .env files
-.env.py
+.env
 .env.local
 .env.*.local
 
