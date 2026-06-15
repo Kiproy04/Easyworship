@@ -18,7 +18,4 @@ class Base(DeclarativeBase):
     pass
 
 
-# ── Model imports — add every new model here ──────────────────────────────────
-from app.models.user import User                      
-from app.models.organisation import Organisation, OrgMember, Invite      
-from app.models.audit import AuditLog                 
+       

@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: easyworship
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -44,8 +44,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/easyworship
-      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5432/easyworship
+      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5433/easyworship
+      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5433/easyworship
       REDIS_URL: redis://redis:6379/0
     ports:
       - "8000:8000"
@@ -67,8 +67,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/easyworship
-      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5432/easyworship
+      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5433/easyworship
+      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5433/easyworship
       REDIS_URL: redis://redis:6379/0
     volumes:
       - .:/app
@@ -88,8 +88,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/easyworship
-      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5432/easyworship
+      DATABASE_URL: postgresql+asyncpg://postgres:password@db:5433/easyworship
+      DATABASE_SYNC_URL: postgresql+psycopg2://postgres:password@db:5433/easyworship
       REDIS_URL: redis://redis:6379/0
     volumes:
       - .:/app
