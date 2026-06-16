@@ -3,14 +3,17 @@ app/config.py
 Centralised settings loaded from environment variables via pydantic-settings.
 All config is accessed through the `settings` singleton.
 """
+import os
 from functools import lru_cache
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+RUN_ENV = os.getenv("APP_ENV", "development")
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(".env", "backend/.env"),
+        env_file=(f".env.{RUN_ENV}", f"backend/.env.{RUN_ENV}"),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",

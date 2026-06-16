@@ -20,7 +20,8 @@ from app.models.audit import AuditLog
 print(">>> METADATA TABLES:", list(Base.metadata.tables.keys()))
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.DATABASE_SYNC_URL)
+escaped_url = settings.DATABASE_SYNC_URL.replace("%", "%%")
+config.set_main_option("sqlalchemy.url", escaped_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
