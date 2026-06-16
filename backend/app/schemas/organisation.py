@@ -3,6 +3,7 @@ app/schemas/organisation.py
 Schemas for organisation CRUD and membership/invite operations.
 """
 from pydantic import BaseModel, EmailStr, Field
+from uuid import UUID
 from app.core.rbac import Role
 from pydantic import BaseModel, ConfigDict, Field
 from uuid import UUID
@@ -67,9 +68,9 @@ class OrgRead(BaseModel):
 
 # ── Org Membership ────────────────────────────────────────────────────────────
 class OrgMemberRead(BaseModel):
-    id: str
-    user_id: str
-    org_id: str
+    id: UUID
+    user_id: UUID
+    org_id: UUID
     role: Role
     is_active: bool
     department: str | None = None
@@ -96,8 +97,8 @@ class InviteCreate(BaseModel):
 
 
 class InviteRead(BaseModel):
-    id: str
-    org_id: str
+    id: UUID
+    org_id: UUID
     email: str
     role: Role
     accepted: bool
