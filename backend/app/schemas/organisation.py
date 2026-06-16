@@ -2,12 +2,12 @@
 app/schemas/organisation.py
 Schemas for organisation CRUD and membership/invite operations.
 """
-from datetime import datetime
-
 from pydantic import BaseModel, EmailStr, Field
-
 from app.core.rbac import Role
-
+from pydantic import BaseModel, ConfigDict, Field
+from uuid import UUID
+from datetime import datetime
+from typing import Annotated, Any
 
 # ── Organisation ─────────────────────────────────────────────────────────────
 class OrgCreate(BaseModel):
@@ -38,10 +38,14 @@ class OrgUpdate(BaseModel):
     timezone: str | None = None
     currency: str | None = None
 
+def uuid_to_str(v: Any) -> Any:
+    if isinstance(v, UUID):
+        return str(v)
+    return v
 
 class OrgRead(BaseModel):
     """Public-facing organisation representation."""
-    id: str
+    id: UUID
     name: str
     slug: str
     church_type: str | None = None
@@ -59,8 +63,7 @@ class OrgRead(BaseModel):
     is_active: bool
     created_at: datetime
 
-    model_config = {"from_attributes": True}
-
+    model_config = ConfigDict(from_attributes=True)
 
 # ── Org Membership ────────────────────────────────────────────────────────────
 class OrgMemberRead(BaseModel):
@@ -76,7 +79,7 @@ class OrgMemberRead(BaseModel):
     user_first_name: str | None = None
     user_last_name: str | None = None
 
-    model_config = {"from_attributes": True}
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OrgMemberUpdate(BaseModel):

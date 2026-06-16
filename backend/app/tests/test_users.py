@@ -1,15 +1,18 @@
 import pytest
 from httpx import AsyncClient
+from faker import Faker
+
+fake = Faker()
 
 @pytest.mark.asyncio
 async def test_register_new_user_success(client: AsyncClient):
     """Verify that a new user can register with a complete profile."""
     payload = {
-        "email": "user@example.com",
-        "password": "L345678$",
-        "first_name": "User",
-        "last_name": "One",
-        "phone": "0712345678"
+        "email": fake.email(),
+        "password": "fakepassword123$",
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name(),
+        "phone": fake.phone_number()
     }
     
     # Execute the request against the sandboxed test server
