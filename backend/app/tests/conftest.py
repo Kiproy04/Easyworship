@@ -7,7 +7,7 @@ from alembic.config import Config
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-
+from sqlalchemy.pool import NullPool
 # 2. Force the application to load the 'test' profile configuration
 os.environ["APP_ENV"] = "test"
 
@@ -16,7 +16,7 @@ from app.db.session import get_db  # Change this to match your actual database s
 from app.main import app
 
 # Create the dedicated async test database engine
-test_engine = create_async_engine(settings.DATABASE_URL, echo=False)
+test_engine = create_async_engine(settings.DATABASE_URL, echo=False, poolclass=NullPool)
 TestingSessionLocal = sessionmaker(
     bind=test_engine, class_=AsyncSession, expire_on_commit=False
 )
@@ -39,11 +39,15 @@ def migrate_database():
 @pytest.fixture
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
     """Provides a pristine, isolated transaction for every single test block."""
-    async with test_engine.begin() as connection:
+    # Use connect() instead of begin() so it doesn't auto-commit
+    async with test_engine.connect() as connection:
+        # 1. Explicitly start a transaction
+        transaction = await connection.begin()
+        # 2. Bind your session to this specific transaction
         async with TestingSessionLocal(bind=connection) as session:
-            yield session
-            # When the test block exits, the transaction automatically rolls back.
-            # This ensures data added in test A never leaks into test B!
+            yield session            
+        # 3. CRITICAL: Always roll back the transaction when the test finishes
+        await transaction.rollback()
 
 @pytest.fixture
 async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
