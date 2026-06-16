@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 # 2. Force the application to load the 'test' profile configuration
-os.environ["APP_ENV"] = "test"
+os.environ["ENV_FILE"] = ".env.test"
 
 from app.config import settings
 from app.db.session import get_db  # Change this to match your actual database session dependency import
