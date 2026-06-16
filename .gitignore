@@ -23,6 +23,7 @@ ENV/
 .env.production
 .env.staging
 .env.development
+.env.test
 
 # IDE
 .vscode/
